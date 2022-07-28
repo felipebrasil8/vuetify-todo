@@ -58,7 +58,7 @@
       editTarefa() {
         if (!this.tarefa.title || !this.tarefa.id) return;
 
-        this.$store.commit('editaTarefa', this.tarefa);
+        this.$store.dispatch('editaTarefa', this.tarefa);
         this.$emit('onCloseModal');
       }
     }

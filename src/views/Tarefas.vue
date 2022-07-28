@@ -1,36 +1,41 @@
 <template>
-  <div>
-    <v-col
-          cols="12"
+  <div class="pa-4">
+    <v-row>
+      <v-col cols="12" class="mt-2">
+        <v-text-field
+          v-model="task"
+          label="Adicione uma tarefa"
+          outlined
+          clearable
+          hide-details
+          @keyup.enter="onKeyEnter"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-list
+          flat
+          subheader
         >
-          <v-text-field
-            v-model="task"
-            label="Tarefa"
-            outlined
-            clearable
-            @keyup.enter="onKeyEnter"
-          ></v-text-field>
-        </v-col>
-    <v-list
-      flat
-      subheader
-    >
-      <v-list-item-group
-        multiple
-        active-class=""
-      >
-        <div
-          v-for="tarefa, index in this.$store.state.tarefas"
-          :key="index"
-        >
-          <tarefa
-            :tarefa="tarefa"
-            @onEdit="onEdit(tarefa)"
-            @onDelete="onDelete(tarefa)"
-          />
-        </div>
-      </v-list-item-group>
-    </v-list>
+          <v-list-item-group
+            multiple
+            active-class=""
+          >
+            <div
+              v-for="tarefa, index in this.$store.state.tarefas"
+              :key="index"
+            >
+              <tarefa
+                :tarefa="tarefa"
+                @onEdit="onEdit(tarefa)"
+                @onDelete="onDelete(tarefa)"
+              />
+            </div>
+          </v-list-item-group>
+        </v-list>
+      </v-col>
+    </v-row>
 
     <modal-editar v-if="modalEdit" :tarefa="modalItem" @onCloseModal="modalEdit = false"/>
     <modal-excluir v-if="modalDelete" :tarefa="modalItem" @onCloseModal="modalDelete = false"/>

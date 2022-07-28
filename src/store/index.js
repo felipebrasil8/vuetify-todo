@@ -1,24 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Localbase from 'localbase'
 
 Vue.use(Vuex)
 
+let db = new Localbase('db');
+
 export default new Vuex.Store({
   state: {
-    tarefas: [
-      {
-        id: Math.random().toString(16).slice(2).toUpperCase(),
-        title: 'Ir ao mercado',
-        status: false
-      },
-      {
-        id: Math.random().toString(16).slice(2).toUpperCase(),
-        title: 'Abastecer o carro',
-        status: true
-      },
-    ]
+    tarefas: [],
   },
   mutations: {
+    carregaTarefas(state) {
+      db.collection('tarefas').get().then(tarefasDB => {
+        state.tarefas = tarefasDB;
+      });
+    },
+
     adiconaTarefa(state, task) {
       const tarefa = {
         id: Math.random().toString(16).slice(2).toUpperCase(),
@@ -26,19 +24,38 @@ export default new Vuex.Store({
         status: false,
       }
 
-      state.tarefas.push(tarefa);
+      db.collection('tarefas').add(tarefa);
     },
-
-    editaTarefa(state, task) {
-      let tarefa = state.tarefas.filter(filtring => filtring.id === task.id).find(() => true);
-      tarefa.title = task.title;
-    },
-
-    removeTarefa(state, id) {
-      state.tarefas = state.tarefas.filter(tarefa => tarefa.id !== id);
-    }
   },
   actions: {
+    async adiconaTarefa({ commit }, task) {
+      await commit('adiconaTarefa', task);
+      await commit('carregaTarefas');
+    },
+
+    editaTarefa({ commit }, task) {
+      db.collection('tarefas')
+        .doc({
+          id: task.id
+        })
+        .update({
+          title: task.title
+        })
+        .then(() => {
+          commit('carregaTarefas');
+        });
+    },
+
+    removeTarefa({ commit }, id) {
+      db.collection('tarefas')
+        .doc({
+          id: id
+        })
+        .delete()
+        .then(() => {
+          commit('carregaTarefas');
+        });
+    }
   },
   modules: {
   }

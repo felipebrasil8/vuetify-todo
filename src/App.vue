@@ -45,12 +45,6 @@
       </v-list>
     </v-navigation-drawer>
 
-    <!-- <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title>Application</v-toolbar-title>
-    </v-app-bar> -->
-
     <v-app-bar
       app
       color="#43a047"
