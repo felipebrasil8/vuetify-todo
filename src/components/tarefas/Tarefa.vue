@@ -16,9 +16,7 @@
         </v-list-item-content>
 
         <v-list-item-action>
-          <v-btn icon @click.stop="onDeleteTarefa(tarefa.id)">
-            <v-icon color="red lighten-1">mdi-delete</v-icon>
-          </v-btn>
+          <tarefa-menu @onAction="onDispathAction" />
         </v-list-item-action>
       </template>
     </v-list-item>
@@ -27,8 +25,15 @@
 </template>
 
 <script>
+
+import TarefaMenu from '@/components/tarefas/TarefaMenu.vue';
+
 export default {
   name: 'Tarefa',
+
+  components: {
+    TarefaMenu,
+  },
 
   props: { 
     tarefa: {
@@ -37,9 +42,9 @@ export default {
   },
 
   methods: {
-    onDeleteTarefa(id) {
-      this.$store.commit('removeTarefa', id);
-    }
+    onDispathAction(action) {
+      this.$emit(action);
+    },
   }
 }
 </script>
