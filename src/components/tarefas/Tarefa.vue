@@ -5,7 +5,11 @@
       @click="tarefa.status = !tarefa.status"
     >
       <template v-slot:default="{}">
-        <v-list-item-action>
+        <v-icon class="pr-2 grabbing">
+          mdi-drag-vertical
+        </v-icon>
+
+        <v-list-item-action class="pr-2">
           <v-checkbox :input-value="tarefa.status"></v-checkbox>
         </v-list-item-action>
 
@@ -48,3 +52,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .grabbing {
+    cursor: -webkit-grabbing; 
+    cursor: grabbing;
+  }
+</style>

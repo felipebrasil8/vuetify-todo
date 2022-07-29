@@ -12,28 +12,31 @@
         ></v-text-field>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col cols="12">
-        <v-list
-          flat
-          subheader
+        <lista-tarefas 
+          @onEdit="onEdit"
+          @onDelete="onDelete"
+        />
+
+        <div
+          v-if="!$store.state.tarefas.length"
+          class="mt-16 animate__animated animate__bounceInUp"
         >
-          <v-list-item-group
-            multiple
-            active-class=""
-          >
-            <div
-              v-for="tarefa, index in this.$store.state.tarefas"
-              :key="index"
+          <center>
+            <v-icon
+            size="100"
+            color="primary"
             >
-              <tarefa
-                :tarefa="tarefa"
-                @onEdit="onEdit(tarefa)"
-                @onDelete="onDelete(tarefa)"
-              />
+              mdi-check
+            </v-icon>
+
+            <div class="text-h5 primary--text">
+              Nenhuma tarefa
             </div>
-          </v-list-item-group>
-        </v-list>
+          </center>
+        </div>
       </v-col>
     </v-row>
 
@@ -43,7 +46,7 @@
 </template>
 
 <script>
-  import Tarefa from '@/components/tarefas/Tarefa.vue'
+  import ListaTarefas from '@/components/tarefas/ListaTarefas.vue'
   import ModalEditar from '@/components/modal/ModalEditar.vue'
   import ModalExcluir from '@/components/modal/ModalExcluir.vue'
 
@@ -51,7 +54,7 @@
     name: 'Tarefas',
 
     components: {
-      Tarefa,
+      ListaTarefas,
       ModalEditar,
       ModalExcluir,
     },

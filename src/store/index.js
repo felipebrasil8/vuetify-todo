@@ -12,25 +12,44 @@ export default new Vuex.Store({
   },
   mutations: {
     carregaTarefas(state) {
-      db.collection('tarefas').get().then(tarefasDB => {
+      db.collection('tarefas').orderBy('position').get().then(tarefasDB => {
         state.tarefas = tarefasDB;
       });
     },
 
-    adiconaTarefa(state, task) {
+    async reordenaTarefas(state, tarefas) {
+      let tarefasParaReordenar = tarefas || [];
+      
+      if (!tarefas) {
+        tarefasParaReordenar = await db.collection('tarefas').orderBy('position').get();
+      }
+
+      tarefasParaReordenar.forEach((tarefa, index) => {
+        db.collection('tarefas')
+          .doc({
+            id: tarefa.id
+          })
+          .update({
+            position: (index + 1)
+          })
+      });
+    }
+  },
+  actions: {
+    async adiconaTarefa({ commit }, task) {
+      const tarefas = await db.collection('tarefas').get();
+      const position = tarefas.length + 1;
+
       const tarefa = {
         id: Math.random().toString(16).slice(2).toUpperCase(),
         title: task,
         status: false,
+        position: position,
       }
 
-      db.collection('tarefas').add(tarefa);
-    },
-  },
-  actions: {
-    async adiconaTarefa({ commit }, task) {
-      await commit('adiconaTarefa', task);
-      await commit('carregaTarefas');
+      db.collection('tarefas').add(tarefa).then(() => {
+        commit('carregaTarefas');
+      });
     },
 
     editaTarefa({ commit }, task) {
@@ -53,9 +72,10 @@ export default new Vuex.Store({
         })
         .delete()
         .then(() => {
+          commit('reordenaTarefas');
           commit('carregaTarefas');
         });
-    }
+    },
   },
   modules: {
   }
