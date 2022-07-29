@@ -1,19 +1,6 @@
 <template>
   <div class="pa-4">
     <v-row>
-      <v-col cols="12" class="mt-2">
-        <v-text-field
-          v-model="task"
-          label="Adicione uma tarefa"
-          outlined
-          clearable
-          hide-details
-          @keyup.enter="onKeyEnter"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-
-    <v-row>
       <v-col cols="12">
         <lista-tarefas 
           @onEdit="onEdit"
@@ -26,8 +13,8 @@
         >
           <center>
             <v-icon
-            size="100"
-            color="primary"
+              size="100"
+              color="primary"
             >
               mdi-check
             </v-icon>
@@ -51,7 +38,7 @@
   import ModalExcluir from '@/components/modal/ModalExcluir.vue'
 
   export default {
-    name: 'Tarefas',
+    name: 'TarefasConcluidas',
 
     components: {
       ListaTarefas,
@@ -61,7 +48,7 @@
 
     data() {
       return {
-        task: null,
+        done: true,
         modalEdit: false,
         modalDelete: false,
         modalItem: {
@@ -72,7 +59,7 @@
     },
 
     created() {
-      this.$store.state.done = false;
+      this.$store.state.done = true;
       this.$store.commit('carregaTarefas');
     },
     
@@ -89,12 +76,6 @@
         }
         this.modalDelete = true;
       },
-      onKeyEnter() {
-        if (!this.task) return;
-
-        this.$store.dispatch('adiconaTarefa', this.task)
-        this.task = null;
-      }
     }
   }
 </script>

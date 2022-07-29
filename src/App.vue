@@ -90,6 +90,7 @@
               <p>- Visualizar uma <strong>tarefa</strong></p>
               <p>- Editar uma <strong>tarefa</strong></p>
               <p>- Deletar uma <strong>tarefa</strong></p>
+              <p>- Marcar/Desmarcar uma <strong>tarefa</strong></p>
               <p>- Alterar a order das <strong>tarefas</strong></p>
               <p>- Todas as ações são salvas com <strong>LocalBase</strong><br /> (incluvise ordenação)</p>
             </v-list-item-title>
@@ -110,6 +111,7 @@
       drawer: true,
       items: [
         { title: 'Tarefas', icon: 'mdi-view-dashboard', to: '/'},
+        { title: 'Tarefas Concluídas', icon: 'mdi-check', to: '/concluidas'},
         { title: 'Sobre', icon: 'mdi-help-box', to: '/sobre' },
       ],
       right: null,

@@ -2,7 +2,7 @@
   <div>
     <v-list-item
       :class="{'blue lighten-4':tarefa.status}"
-      @click="tarefa.status = !tarefa.status"
+      @click="onClickTarefa(tarefa)"
     >
       <template v-slot:default="{}">
         <v-icon class="pr-2 grabbing">
@@ -49,6 +49,11 @@ export default {
     onDispathAction(action) {
       this.$emit(action);
     },
+
+    onClickTarefa(tarefa) {
+      tarefa.status = !tarefa.status
+      this.$store.commit('atualizaStatus', tarefa);
+    }
   }
 }
 </script>

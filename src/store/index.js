@@ -8,13 +8,17 @@ let db = new Localbase('db');
 
 export default new Vuex.Store({
   state: {
+    done: false,
     tarefas: [],
   },
   mutations: {
     carregaTarefas(state) {
-      db.collection('tarefas').orderBy('position').get().then(tarefasDB => {
-        state.tarefas = tarefasDB;
-      });
+      db.collection('tarefas')
+        .orderBy('position')
+        .get()
+        .then(tarefasDB => {
+          state.tarefas = tarefasDB.filter(tarefa => tarefa.status === state.done);
+        });
     },
 
     async reordenaTarefas(state, tarefas) {
@@ -33,7 +37,17 @@ export default new Vuex.Store({
             position: (index + 1)
           })
       });
-    }
+    },
+
+    atualizaStatus(state, task) {
+      db.collection('tarefas')
+        .doc({
+          id: task.id
+        })
+        .update({
+          status: task.status
+        });
+    },
   },
   actions: {
     async adiconaTarefa({ commit }, task) {
