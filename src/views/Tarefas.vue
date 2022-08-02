@@ -13,7 +13,12 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row v-if="loaderLayout">
+      <v-col cols="12" class="text-center">
+        <v-progress-circular v-if="loaderLayout" indeterminate :size="50" color="green" />
+      </v-col>
+    </v-row>
+    <v-row v-else>
       <v-col cols="12">
         <lista-tarefas 
           @onEdit="onEdit"
@@ -49,6 +54,7 @@
   import ListaTarefas from '@/components/tarefas/ListaTarefas.vue'
   import ModalEditar from '@/components/modal/ModalEditar.vue'
   import ModalExcluir from '@/components/modal/ModalExcluir.vue'
+  import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'Tarefas',
@@ -72,11 +78,24 @@
     },
 
     created() {
+      this.changeLoaderLayout(true);
       this.$store.state.done = false;
       this.$store.commit('carregaTarefas');
+      setTimeout(() => {
+        this.changeLoaderLayout(false);
+      }, 500)
+    },
+
+    computed: {
+      ...mapGetters({
+        loaderLayout: 'loaderLayout',
+      }),
     },
     
     methods: {
+      ...mapActions({
+        changeLoaderLayout: 'changeLoaderLayout',
+      }),
       onEdit(tarefa) {
         this.modalItem = {
           ...tarefa

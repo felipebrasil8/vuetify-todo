@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Localbase from 'localbase'
+import { ui } from '@/store/ui/index';
 
 Vue.use(Vuex)
 
@@ -10,8 +11,10 @@ export default new Vuex.Store({
   state: {
     done: false,
     tarefas: [],
+    ...ui.state,
   },
   mutations: {
+    ...ui.mutations,
     carregaTarefas(state) {
       db.collection('tarefas')
         .orderBy('position')
@@ -50,6 +53,8 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    ...ui.actions,
+
     async adiconaTarefa({ commit }, task) {
       const tarefas = await db.collection('tarefas').get();
       const position = tarefas.length + 1;
@@ -90,6 +95,9 @@ export default new Vuex.Store({
           commit('carregaTarefas');
         });
     },
+  },
+  getters: {
+    ...ui.getters,
   },
   modules: {
   }
